@@ -50,7 +50,7 @@ services:
       - 35000:5432
 
   postgres_admin:
-    image: dpage/pgadmin4:4.28
+    image: dpage/pgadmin4:6.2
     depends_on:
       - postgres
     environment:
