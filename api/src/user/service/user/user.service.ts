@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { map, mapTo, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import {
   IPaginationOptions,
   paginate,
@@ -15,14 +15,14 @@ import {
 import { UserEntity } from '../../model/entities/user.entity';
 import { User } from '../../model/interfaces/user.interface';
 import { Repository } from 'typeorm';
-import { UserHelperService } from '../user-helper/user-helper.service';
+import { AuthService } from '../../../auth/service/auth.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private userHelperService: UserHelperService,
+    private authService: AuthService,
   ) {}
 
   create(newUser: User): Observable<User> {
@@ -50,8 +50,7 @@ export class UserService {
     return from(paginate<UserEntity>(this.userRepository, options));
   }
 
-  // TODO: Refactor to use JWT
-  login(user: User): Observable<boolean> {
+  login(user: User): Observable<string> {
     return from(this.findByEmail(user.email)).pipe(
       switchMap((foundUser: User) => {
         if (!foundUser) throw new NotFoundException('user not found');
@@ -63,7 +62,11 @@ export class UserService {
                 'login failed, wrong credentials',
               );
 
-            return this.findOne(foundUser.id).pipe(mapTo(true));
+            return this.findOne(foundUser.id).pipe(
+              switchMap((payload: User) =>
+                this.authService.generateJwt(payload),
+              ),
+            );
           }),
         );
       }),
@@ -83,7 +86,7 @@ export class UserService {
   }
 
   private hashPassword(password: string): Observable<string> {
-    return from(this.userHelperService.hashPassword(password));
+    return from(this.authService.hashPassword(password));
   }
 
   private findOne(id: number): Observable<User> {
@@ -104,8 +107,6 @@ export class UserService {
     password: string,
     storedPassword: string,
   ): Observable<boolean> {
-    return from(
-      this.userHelperService.comparePasswords(storedPassword, password),
-    );
+    return from(this.authService.comparePasswords(storedPassword, password));
   }
 }
