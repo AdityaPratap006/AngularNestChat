@@ -11,6 +11,9 @@ COPY package*.json ./
 # Install deps inside container
 RUN npm install
 
+# Copy your src folder
+COPY ./src ./
+
 RUN npm run build
 
 EXPOSE 3000
