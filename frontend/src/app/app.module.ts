@@ -6,6 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { JwtModule } from '@auth0/angular-jwt';
+
+function tokenGetter() {
+  return localStorage.getItem('auth_token');
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +20,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HttpClientModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
+    JwtModule.forRoot({
+      config: {
+        allowedDomains: ['localhost:3000'],
+        tokenGetter,
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
