@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 100px 20px;
+  min-width: 200px;
+  max-width: 90vw;
+
+  .login-section {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  mat-card {
+    width: 20rem;
+    max-width: 80vw;
+    padding: 1rem;
+
+    mat-card-title {
+      text-align: center;
+    }
+
+    mat-card-content {
+      form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        mat-form-field {
+          width: 100%;
+        }
+
+        .button-container {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+}
