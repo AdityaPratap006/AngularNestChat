@@ -30,4 +30,8 @@ export class AuthService {
   generateJwt(user: User): Observable<string> {
     return from(this.jwtService.signAsync({ user }));
   }
+
+  verifyJwt(jwt: string): Promise<{ user: User; iat: number; exp: number }> {
+    return this.jwtService.verifyAsync(jwt);
+  }
 }

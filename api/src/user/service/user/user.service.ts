@@ -93,6 +93,10 @@ export class UserService {
     return from(this.userRepository.findOne({ id }));
   }
 
+  public getOne(id: number): Promise<User> {
+    return this.userRepository.findOneOrFail({ id });
+  }
+
   // Also returns the password
   private findByEmail(email: string): Observable<User> {
     return from(
