@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { PublicAuthGuard } from './guards/public-auth.guard';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
     path: 'public',
     loadChildren: () =>
       import('./public/public.module').then((m) => m.PublicModule),
+    canActivate: [PublicAuthGuard],
   },
   {
     path: '**',
