@@ -7,10 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { JwtModule } from '@auth0/angular-jwt';
-
-function tokenGetter() {
-  return localStorage.getItem('auth_token');
-}
+import { tokenGetter } from './utils/token-getter';
 
 @NgModule({
   declarations: [AppComponent],
